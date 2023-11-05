@@ -1,4 +1,4 @@
-const { Appointment, User } = require("../models/schema");
+const { Appointment, User, Medicine } = require("../models/schema");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const {
@@ -7,9 +7,80 @@ const {
     sendJwtToken,
 } = require("../middleware/middleware");
 
+const buyMedicine = async (req, res) => {
+    const { id, buyyerID } = req.body;
+    console.log(id);
+    console.log(buyyerID);
+    try {
+        const data = await Medicine.findById(id);
+        const buyyer = await User.findById(buyyerID);
+        if (data) {
+            const mailOptions = {
+                from: "anshikthind@gmail.com", // Sender's email
+                to: data.seller, // Recipient's email
+                subject: `User ${buyyer.email} will buy Medicine`,
+                text: `User  ${buyyer.email + " " + buyyer.first_name + " " + buyyer.last_name
+                    } will is coming to buy ${data.name} for ${data.treat} from you.`,
+            };
+
+            const mailOption = {
+                from: "anshikthind@gmail.com", // Sender's email
+                to: buyyer.email, // Recipient's email
+                subject: `Buy Medicine from ${data.seller}`,
+                text: `You can go and buy medicine from ${data.seller} at ${data.address}`,
+            };
+            // Send the email
+            transporter.sendMail(mailOption, (error, info) => {
+                if (error) {
+                    console.log("Email verification error: " + error);
+                } else {
+                    console.log("Email sent: " + info.response);
+                }
+            });
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log("Email verification error: " + error);
+                } else {
+                    console.log("Email sent: " + info.response);
+                }
+            });
+            res.send({ buy: true });
+        }
+    } catch (error) {
+        res.send({ buy: false });
+    }
+};
+const getAllMedicine = async (req, res) => {
+    const data = await Medicine.find();
+    if (data) {
+        res.send(data);
+    } else {
+        res.send([]);
+    }
+};
+const uploadMedicine = async (req, res) => {
+    const { name, price, treat, seller, address } = req.body;
+    // console.log('hit')
+    try {
+        const data = await Medicine.create({
+            name: name,
+            price: price,
+            address: address,
+            seller: seller,
+            treat: treat,
+        });
+        if (data) {
+            res.send({ update: data });
+        } else {
+            res.send({ update: false });
+        }
+    } catch (error) {
+        res.send({ update: "err" });
+    }
+};
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     try {
         const data = await User.findOne({ email: email });
         if (!data) {
@@ -32,7 +103,7 @@ const loginUser = async (req, res) => {
                     gender: data.gender,
                     contact: data.contact,
                     verified: data.verified,
-                    role: data.role
+                    role: data.role,
                 });
             } else {
                 res.status(200).send({
@@ -267,7 +338,7 @@ const acceptDoctorByUser = async (req, res) => {
             console.log("Email sent: " + info.response);
         }
     });
-    res.send('done')
+    res.send("done");
 };
 const acceptUserAppointment = async (req, res) => {
     const { _id, time, date } = req.body;
@@ -316,4 +387,7 @@ module.exports = {
     sendAllAppointments,
     acceptUserAppointment,
     acceptDoctorByUser,
+    uploadMedicine,
+    getAllMedicine,
+    buyMedicine,
 };

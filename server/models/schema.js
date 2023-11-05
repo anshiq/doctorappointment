@@ -1,4 +1,12 @@
 const mongoose = require("mongoose");
+const MedicineSchema = new mongoose.Schema({
+    name: String,
+    treat: String,
+    price: String,
+    seller: String,
+    address: String
+
+});
 const AppointmentSchema = new mongoose.Schema({
     userId: {
         type: String,
@@ -62,4 +70,5 @@ const LoginSchema = new mongoose.Schema({
 });
 const Appointment = mongoose.model("taskDetails", AppointmentSchema);
 const User = mongoose.model("loginDetails", LoginSchema);
-module.exports = { Appointment, User };
+const Medicine = mongoose.model("medicine", MedicineSchema);
+module.exports = { Appointment, User, Medicine };

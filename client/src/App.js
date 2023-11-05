@@ -9,6 +9,8 @@ import EmailVerification from "./components/EmailVerification";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DoctorPage from "./components/Doctor";
+import MedicSell from "./components/MedicSell";
+import GetAllMedicine from "./components/AllMedicine";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -25,6 +27,8 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/medicsell" element={<MedicSell />} />
+                    <Route path="/buy" element={<GetAllMedicine />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     {user && user.role === "doctor" ? (

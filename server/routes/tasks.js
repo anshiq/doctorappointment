@@ -9,12 +9,18 @@ const {
     updateUserAppointment,
     verifyEmailToken,
     acceptUserAppointment,
-    acceptDoctorByUser
+    acceptDoctorByUser,
+    uploadMedicine,
+    getAllMedicine,
+    buyMedicine
 } = require("../controllers/functions");
 const routerUser = express.Router();
 const routerAppointment = express.Router();
 // login / signup / verifyemail
 routerUser.route("/login").post(loginUser);
+routerUser.route("/sell").post(uploadMedicine);
+routerUser.route("/allmedicine").get(getAllMedicine);
+routerUser.route("/buy").post(buyMedicine);
 routerUser.route("/signup").post(signupUser);
 routerUser.route("/verifyemail").post(verifyEmailToken);
 // routerAppointment 
