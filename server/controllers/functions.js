@@ -104,6 +104,7 @@ const loginUser = async (req, res) => {
                     contact: data.contact,
                     verified: data.verified,
                     role: data.role,
+                    specialization: data.specialization
                 });
             } else {
                 res.status(200).send({
@@ -198,12 +199,14 @@ const signupUser = async (req, res) => {
         dob,
         gender,
         address,
+        specialization
     } = req.body;
     password = await encryptPassword(password);
     const verificationToken = generateVerificationToken();
     try {
         const user = await User.create({
             verificationToken: verificationToken,
+            specialization: specialization,
             email: email,
             password: password,
             first_name: first_name,
@@ -230,11 +233,13 @@ const createUserAppointment = async (req, res) => {
     // console.log(req.user);
     // console.log("Appointment create");
     // console.log(req.body);
-    const { first_name, last_name, gender, dob, contact, date, time } = req.body;
+    const { first_name, problem, last_name, gender, dob, contact, date, time } = req.body;
+    console.log(problem)
     const appointmentDetails = await Appointment.create({
         userId: req.user,
         first_name: first_name,
         last_name: last_name,
+        problem: problem,
         gender: gender,
         dob: dob,
         contact: contact,
@@ -314,7 +319,7 @@ const acceptDoctorByUser = async (req, res) => {
         from: "anshikthind@gmail.com", // Sender's email
         to: user.email, // Recipient's email
         subject: "Your Appointment Details",
-        text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${doctor.first_name} ${doctor.last_name}  `,
+        text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${doctor.first_name} ${doctor.last_name} specialized in ${doctor.specialization} `,
     };
 
     const mailOption = {
@@ -344,22 +349,14 @@ const acceptUserAppointment = async (req, res) => {
     const { _id, time, date } = req.body;
     const appointmentId = _id;
     const doctorId = req.user;
-    // console.log(doc)
     const doctorData = await User.findById(doctorId);
     const data = await Appointment.findById(appointmentId);
-    console.log(doctorData);
-    console.log(doctorId);
-    console.log(data);
-    console.log(date);
-    console.log(time);
-    // res.send('hi')
-    // return
-    console.log(data);
     if (data) {
         if (data.check == 0) {
             data.doctorIds.push({
                 doctorId: doctorId,
                 first_name: doctorData.first_name,
+                specialization: doctorData.specialization,
                 last_name: doctorData.last_name,
                 time: time,
                 date: date,

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 function NewAppointment() {
     const navigate = useNavigate();
-    const [dataTime, setDataTime] = useState({ date: "", time: "" });
+    const [dataTime, setDataTime] = useState({ date: "", time: "", problem: "" });
     const [user, setUser] = useState({
         first_name: "",
         last_name: "",
@@ -43,6 +43,7 @@ function NewAppointment() {
             contact: user.contact,
             date: dataTime.date,
             time: dataTime.time,
+            problem: dataTime.problem
         };
         // console.log(user.token);
         console.log(datak);
@@ -67,8 +68,8 @@ function NewAppointment() {
             <div className="container mx-auto mt-8">
                 {user.first_name ? (
                     <>
-                        <nav className="w-full bg-red-200 h-16 flex justify-center items-center">
-                            <div className="text-xl text-white font-semibold">
+                        <nav className="bg-red-200 p-4 flex items-center justify-between">
+                            <div className="text-2xl text-white font-semibold">
                                 {`${user.first_name} ${user.last_name}`}
                             </div>
                             <button
@@ -77,7 +78,7 @@ function NewAppointment() {
                                     localStorage.removeItem("user");
                                     navigate("/");
                                 }}
-                                className="ml-2 bg-blue-400 text-white p-1"
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
                             >
                                 Sign Out
                             </button>
@@ -104,6 +105,18 @@ function NewAppointment() {
                                     value={dataTime.time}
                                     onChange={handleTimeChange}
                                     className="w-full border rounded p-2 mb-4"
+                                    required
+                                />
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Enter the Your Health Issue
+                                </label>
+                                <input
+                                    type="text"
+                                    name="problem"
+                                    value={dataTime.problem}
+                                    onChange={handleTimeChange}
+                                    className="w-full border rounded p-2 mb-4"
+                                    placeholder="Example: Eyes Pain, Fever..."
                                     required
                                 />
                             </div>

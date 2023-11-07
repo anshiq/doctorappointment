@@ -8,6 +8,7 @@ const MedicineSchema = new mongoose.Schema({
 
 });
 const AppointmentSchema = new mongoose.Schema({
+    problem: String,
     userId: {
         type: String,
         required: true, // You can specify other validation rules if needed
@@ -52,6 +53,7 @@ const AppointmentSchema = new mongoose.Schema({
 const LoginSchema = new mongoose.Schema({
     first_name: String,
     last_name: String,
+    specialization: String,
     email: {
         type: String,
         unique: true, // Set the 'unique' property to true

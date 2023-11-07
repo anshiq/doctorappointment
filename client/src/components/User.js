@@ -116,20 +116,32 @@ function UserHome() {
         <>
             {userData ? (
                 <div className="min-h-screen flex items-center flex-col justify-start w-screen bg-gray-300">
-                    <nav className="w-full bg-red-200 h-16 flex justify-center items-center">
-                        <div className="text-xl text-white font-semibold">
+                    <nav className="bg-red-500 p-4 flex w-full items-center justify-between">
+                        <div className="text-2xl text-white font-semibold">
                             {`${userData.first_name} ${userData.last_name}`}
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                localStorage.removeItem("user");
-                                navigate("/");
-                            }}
-                            className="ml-2 bg-blue-500 p-1 text-white"
-                        >
-                            Sign Out
-                        </button>
+                        <div>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    // localStorage.removeItem("user");
+                                    navigate("/buy");
+                                }}
+                                className="bg-green-500 mr-4 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                            >
+                                Buy Medicines
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    localStorage.removeItem("user");
+                                    navigate("/");
+                                }}
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+                            >
+                                Sign Out
+                            </button>
+                        </div>
                     </nav>
                     <div className="w-1/2  my-4 p-4 flex flex-col gap-5 items-center justify-center">
                         <button
@@ -156,6 +168,12 @@ function UserHome() {
                                             <div>
                                                 <span className="font-bold">Name: </span>
                                                 {`${appointment.first_name} ${appointment.last_name}`}
+                                            </div>
+                                        )}
+                                        {appointment.problem && (
+                                            <div>
+                                                <span className="font-bold">Health Issue: </span>
+                                                {`${appointment.problem}`}
                                             </div>
                                         )}
                                         {appointment.gender && (
@@ -195,7 +213,10 @@ function UserHome() {
                                                         <div key={index} class="border p-4 rounded-md">
                                                             <p class="text-gray-800">
                                                                 Doctor Name: {each.first_name}{" "}
-                                                                {appointment.last_name}
+                                                                {each.last_name}
+                                                            </p>
+                                                            <p class="text-gray-800">
+                                                                Specialization:   {each.specialization}
                                                             </p>
                                                             <p class="text-gray-600">Date: {each.date}</p>
                                                             <p class="text-gray-600">Time: {each.time}</p>

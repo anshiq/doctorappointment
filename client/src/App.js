@@ -27,7 +27,7 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/medicsell" element={<MedicSell />} />
+                    {/* <Route path="/medicsell" element={<MedicSell />} /> */}
                     <Route path="/buy" element={<GetAllMedicine />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
@@ -35,9 +35,19 @@ function App() {
                         <Route path="/*" element={<DoctorPage />} />
                     ) : (
                         <>
-                            <Route path="/home" element={<UserHome />} />
-                            <Route path="/newappointment" element={<NewAppointment />} />
-                            <Route path="/verify-email" element={<EmailVerification />} />
+
+                            {user && user.role === "medic" ? (
+                                <>
+                                    <Route path="/*" element={<GetAllMedicine />} />
+                                    <Route path="/medicsell" element={<MedicSell />} />
+                                </>
+                            ) : (
+                                <>
+                                    <Route path="/home" element={<UserHome />} />
+                                    <Route path="/newappointment" element={<NewAppointment />} />
+                                    <Route path="/verify-email" element={<EmailVerification />} />
+                                </>
+                            )}
                         </>
                     )}
                     {/* <Route path="*" element={<Navigate to="/" />} /> */}

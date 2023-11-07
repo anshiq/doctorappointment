@@ -88,8 +88,8 @@ const DoctorPage = () => {
     return (
         <>
             <div className="container mx-auto">
-                <nav className="w-full bg-red-200 h-16 flex justify-center items-center">
-                    <div className="text-xl text-white font-semibold">
+                <nav className="bg-red-500 p-4 flex items-center justify-between">
+                    <div className="text-2xl text-white font-semibold">
                         Doctor Portal Page
                     </div>
                     <button
@@ -98,7 +98,7 @@ const DoctorPage = () => {
                             localStorage.removeItem("user");
                             navigate("/");
                         }}
-                        className="ml-2 bg-blue-400 text-white p-1"
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
                     >
                         Sign Out
                     </button>
@@ -115,6 +115,9 @@ const DoctorPage = () => {
                                 >
                                     <h2 className="text-lg font-semibold">
                                         {appointment.first_name} {appointment.last_name}
+                                    </h2>
+                                    <h2 className="text-lg font-semibold">
+                                        Health Issue: {appointment.problem}
                                     </h2>
                                     <p className="text-gray-600">Gender: {appointment.gender}</p>
                                     <p className="text-gray-600">

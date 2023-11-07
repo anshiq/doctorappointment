@@ -3,51 +3,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const containerStyle = {
-    textAlign: "center",
-    padding: "20px",
-    backgroundImage:
-        'url("https://img.freepik.com/free-vector/clean-medical-background_53876-97927.jpg")',
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-};
-
-const headingStyle = {
-    fontSize: "60px",
-    color: "royalblue",
-    margin: "10px 0",
-};
-
-const inputStyle = {
-    width: "50%",
-    padding: "10px",
-    marginLeft: "25%",
-    marginRight: "25%",
-    marginTop: "10px",
-    fontSize: "16px",
-};
-
-const buttonStyle = {
-    backgroundColor: "red",
-    color: "white",
-    padding: "10px 20px",
-    margin: "10px",
-    border: "none",
-    cursor: "pointer",
-};
-
-function Register() {
+const Register = () => {
     const [user, setUser] = useState({
         first_name: "",
         last_name: "",
         email: "",
         password: "",
         contact: "",
-        role: "",
+        role: "patient",
         dob: "",
         gender: "",
         address: "",
-        // Add other user fields as needed
+        specialization: ""
     });
 
     const navigate = useNavigate();
@@ -61,118 +28,183 @@ function Register() {
     };
 
     const handleRegister = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         axios
             .post("http://localhost:8080/api/signup", user) // Update the server URL
             .then((response) => {
                 console.log(response.data);
                 if (response.data.signup) {
                     toast.success("User registered successfully");
-                    toast.warn('Check mail box to verify Email')
+                    toast.warn("Check your mailbox to verify your email.");
                     navigate("/login");
-                }
-                else {
-                    toast.error('User Registration Failed')
+                } else {
+                    toast.error("User Registration Failed");
                 }
             })
             .catch((error) => {
                 console.error("Registration failed:", error);
                 toast.error("Registration failed");
-                // navigate("/");
             });
     };
 
     return (
-        <form onSubmit={handleRegister} style={containerStyle}>
-            <h2 style={headingStyle}>Register</h2>
-            <input
-                style={inputStyle}
-                type="text"
-                name="first_name"
-                placeholder="First Name"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="text"
-                name="last_name"
-                placeholder="Last Name"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="tel"
-                name="contact"
-                placeholder="Contact"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="text"
-                name="role"
-                placeholder="Role"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="date"
-                name="dob"
-                placeholder="DOB"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="text"
-                name="gender"
-                placeholder="Gender"
-                onChange={handleInputChange}
-                required
-            />
-            <input
-                style={inputStyle}
-                type="text"
-                name="address"
-                placeholder="Address"
-                onChange={handleInputChange}
-                required
-            />
-            {/* Add input fields for other user fields here */}
-            <button type="submit" style={buttonStyle}>
-                Register
-            </button>
-            <button
-                type="button"
-                style={buttonStyle}
-                onClick={() => navigate("/login")}
+        <div className="flex justify-center items-center h-screen">
+            <form
+                onSubmit={handleRegister}
+                className="bg-white p-8 w-[80%] rounded shadow-md"
             >
-                Login
-            </button>
-            <button type="button" style={buttonStyle} onClick={() => navigate("/")}>
-                Home
-            </button>
-        </form>
+                <h2 className="text-2xl mb-4">Register</h2>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        name="first_name"
+                        placeholder="First Name"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        name="last_name"
+                        placeholder="Last Name"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="tel"
+                        name="contact"
+                        placeholder="Contact"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label>Role:</label>
+                    <div>
+                        <input
+                            type="radio"
+                            name="role"
+                            value="doctor"
+                            checked={user.role === "doctor"}
+                            onChange={handleInputChange}
+                        />
+                        <label className="ml-2">Doctor</label>
+                    </div>
+                    <div>
+                        <input
+                            type="radio"
+                            name="role"
+                            value="patient"
+                            checked={user.role === "patient"}
+                            onChange={handleInputChange}
+                        />
+                        <label className="ml-2">Patient</label>
+                    </div>
+                    <div>
+                        <input
+                            type="radio"
+                            name="role"
+                            value="medic"
+                            checked={user.role === "medic"}
+                            onChange={handleInputChange}
+                        />
+                        <label className="ml-2">Medic</label>
+                    </div>
+                </div>
+                {user.role === "doctor" ? (
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            name="specialization"
+                            placeholder="Specialization"
+                            className="w-full p-2 border rounded"
+                            onChange={handleInputChange}
+                            // value={user.specialization}
+                            required
+                        />
+                    </div>
+                ) : (
+                    <></>
+                )}
+                <div className="mb-4">
+                    <input
+                        type="date"
+                        name="dob"
+                        placeholder="DOB"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        name="gender"
+                        placeholder="Gender"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        name="address"
+                        placeholder="Address"
+                        className="w-full p-2 border rounded"
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white p-2 rounded"
+                >
+                    Register
+                </button>
+                <button
+                    type="button"
+                    onClick={() => navigate("/login")}
+                    className="w-full mt-4 bg-gray-500 text-white p-2 rounded"
+                >
+                    Login
+                </button>
+                <button
+                    type="button"
+                    onClick={() => navigate("/")}
+                    className="w-full mt-4 bg-gray-500 text-white p-2 rounded"
+                >
+                    Home
+                </button>
+            </form>
+        </div>
     );
-}
+};
 
 export default Register;
