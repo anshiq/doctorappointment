@@ -5,12 +5,10 @@ import { toast } from "react-toastify";
 
 export default function DoctorUpdateAppointments() {
     const navigate = useNavigate();
-    const [date_time, setDateTime] = useState([
-        {
-            date: "",
-            time: "",
-        },
-    ]);
+    const [date_time, setDateTime] = useState({
+        date: "",
+        time: "",
+    });
     const [date_time_temp, setDate_time_temp] = useState(null);
     const [old_date_array, setOld_date_array] = useState([]);
     const [appointments, setAppointments] = useState([]);
@@ -106,7 +104,7 @@ export default function DoctorUpdateAppointments() {
         axios
             .post(
                 "http://localhost:8080/auth/updatedoc",
-                { date: "7-7-2020", time: "3:00", _id: id },
+                { date: date_time.date, time: date_time.time, _id: id },
                 {
                     headers: {
                         token: k.token,
@@ -114,9 +112,9 @@ export default function DoctorUpdateAppointments() {
                 },
             )
             .then((response) => {
-                console.log(response.data)
-            })
-    }
+                console.log(response.data);
+            });
+    };
     return (
         <>
             <div className="">
@@ -204,22 +202,24 @@ export default function DoctorUpdateAppointments() {
             </div>
             {date_time_temp ? (
                 <>
-                    <dialog className="w-full h-screen bg-black  absolute flex items-center justify-center top-0" open>
+                    <dialog
+                        className="w-full h-screen bg-black  absolute flex items-center justify-center top-0"
+                        open
+                    >
                         <div className="bg-white p-6 rounded-lg">
                             <div className="mb-4">
                                 <label className="block text-gray-700">Date</label>
                                 <input
                                     name="date"
                                     onChange={(e) => {
-                                        {
-                                            setDate_time_temp((k) => {
-                                                return ({ ...k, [e.target.name]: e.target.value })
-                                            })
-                                        }
+                                        setDateTime((k) => ({
+                                            ...k,
+                                            [e.target.name]: e.target.value,
+                                        }));
                                     }}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     type="date"
-                                    value={date_time_temp.date}
+                                    value={date_time.date}
                                 />
                             </div>
                             <div className="mb-4">
@@ -227,22 +227,20 @@ export default function DoctorUpdateAppointments() {
                                 <input
                                     name="time"
                                     onChange={(e) => {
-                                        {
-                                            setDate_time_temp((k) => {
-                                                return ({ ...k, [e.target.name]: e.target.value })
-                                            })
-                                        }
+                                        setDateTime((k) => ({
+                                            ...k,
+                                            [e.target.name]: e.target.value,
+                                        }));
                                     }}
                                     className="w-full p-2 border border-gray-300 rounded"
                                     type="time"
-                                    value={date_time_temp.time}
+                                    value={date_time.time}
                                 />
                             </div>
                             <button
                                 className="bg-blue-500 mr-3 text-white px-4 py-2 rounded hover:bg-blue-700"
                                 onClick={() => {
-                                    setDate_time_temp(null)
-
+                                    setDate_time_temp(null);
                                 }}
                             >
                                 Close
@@ -250,8 +248,8 @@ export default function DoctorUpdateAppointments() {
                             <button
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                                 onClick={() => {
-                                    console.log(date_time_temp)
-                                    handleUpdate(date_time_temp)
+                                    console.log(date_time_temp);
+                                    handleUpdate(date_time_temp);
                                     // Handle the button click
                                 }}
                             >

@@ -27,7 +27,7 @@ const DoctorPerspectiveUpdateAppointment = async (req, res) => {
         data.doctorIds[indx[0]] = { ...data.doctorIds[indx[0]], date: date, time: time }
         data.save()
         console.log(data);
-        res.send("Updated successfully");
+        res.send(data);
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
