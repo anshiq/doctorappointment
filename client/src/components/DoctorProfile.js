@@ -18,6 +18,7 @@ const DoctorProfile = () => {
                     }
                 });
                 console.log(response.data)
+                console.log(response.data.user)
                 setUserData(response.data.user);
                 setAppointments(response.data);
             } catch (error) {
@@ -37,7 +38,7 @@ const DoctorProfile = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {appointments.acceptedArray.length > 0 ?
+                {appointments.acceptedArray.length > 0 && appointments.acceptedArray[0] !== null ?
                     <>
                         {appointments.acceptedArray.map(appointment => (
                             <div key={appointment._id} className="bg-green-200 p-4 rounded shadow">
@@ -49,7 +50,7 @@ const DoctorProfile = () => {
                     </> : <div>No Accepted Appointments...</div>
                 }
 
-                {appointments.rejectedArray.length > 0 ?
+                {appointments.rejectedArray.length > 0 && appointments.rejectedArray[0] !== null ?
                     <>
                         {appointments.rejectedArray.map(appointment => (
                             <div key={appointment._id} className="bg-red-200 p-4 rounded shadow">
