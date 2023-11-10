@@ -12,6 +12,7 @@ import DoctorPage from "./components/Doctor";
 import MedicSell from "./components/MedicSell";
 import GetAllMedicine from "./components/AllMedicine";
 import DoctorProfile from "./components/DoctorProfile";
+import DoctorUpdateAppointments from "./components/DoctorUpdateAppointments";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -36,6 +37,7 @@ function App() {
                         <>
                             <Route path="/*" element={<DoctorPage />} />
                             <Route path="/profile" element={<DoctorProfile />} />
+                            <Route path="/yourappointments" element={<DoctorUpdateAppointments />} />
                         </>
                     ) : (
                         <>

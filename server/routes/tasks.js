@@ -13,7 +13,8 @@ const {
     uploadMedicine,
     getAllMedicine,
     buyMedicine,
-    getAllAppointmentDoctorPerspective
+    getAllAppointmentDoctorPerspective,
+    DoctorPerspectiveUpdateAppointment
 } = require("../controllers/functions");
 const routerUser = express.Router();
 const routerAppointment = express.Router();
@@ -26,6 +27,7 @@ routerUser.route("/signup").post(signupUser);
 routerUser.route("/verifyemail").post(verifyEmailToken);
 // routerAppointment 
 routerAppointment.route("/getAppointments").post(getUserAppointment);
+routerAppointment.route("/updatedoc").post(DoctorPerspectiveUpdateAppointment);
 routerAppointment.route("/getAccRej").post(getAllAppointmentDoctorPerspective);
 routerAppointment.route("/createAppointment").post(createUserAppointment);
 routerAppointment.route("/deleteAppointment").post(deleteUserAppointment);

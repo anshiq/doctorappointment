@@ -96,6 +96,15 @@ const DoctorPage = () => {
                         <button
                             type="button"
                             onClick={() => {
+                                navigate("/yourappointments");
+                            }}
+                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                        >
+                            Your Appointments
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
                                 navigate("/profile");
                             }}
                             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"

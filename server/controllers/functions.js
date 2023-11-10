@@ -7,6 +7,32 @@ const {
     sendJwtToken,
 } = require("../middleware/middleware");
 
+const DoctorPerspectiveUpdateAppointment = async (req, res) => {
+    const { _id, time, date } = req.body;
+    const appointmentId = _id;
+    const doctorId = req.user; // Make sure req.user contains the correct doctor ID
+
+    try {
+        const data = await Appointment.findById(appointmentId);
+        const indx = data.doctorIds.map((each, index) => {
+            if (each.doctorId === doctorId) {
+                console.log(doctorId);
+                console.log(index);
+                return index;
+            }
+            else {
+                return null;
+            }
+        });
+        data.doctorIds[indx[0]] = { ...data.doctorIds[indx[0]], date: date, time: time }
+        data.save()
+        console.log(data);
+        res.send("Updated successfully");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 const getAllAppointmentDoctorPerspective = async (req, res) => {
     try {
         const userId = req.user;
@@ -14,20 +40,24 @@ const getAllAppointmentDoctorPerspective = async (req, res) => {
         const acc = data.AccecptedAppointments;
         const rej = data.RejectedAppointments;
 
-        const accp = await Promise.all(acc.map(async (each) => {
-            const dk = await Appointment.findById(each);
-            return dk;
-        }));
+        const accp = await Promise.all(
+            acc.map(async (each) => {
+                const dk = await Appointment.findById(each);
+                return dk;
+            }),
+        );
 
-        const rejp = await Promise.all(rej.map(async (each) => {
-            const dk = await Appointment.findById(each);
-            return dk;
-        }));
+        const rejp = await Promise.all(
+            rej.map(async (each) => {
+                const dk = await Appointment.findById(each);
+                return dk;
+            }),
+        );
 
         res.send({ acceptedArray: accp, rejectedArray: rejp, user: data });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: 'Internal Server Error' });
+        res.status(500).send({ error: "Internal Server Error" });
     }
 };
 const buyMedicine = async (req, res) => {
@@ -356,8 +386,8 @@ const acceptDoctorByUser = async (req, res) => {
             await Promise.all(nonAcceptedDoctorPromises);
 
             const doctor = data.doctorIds.filter((e) => e.doctorId === doctorId);
-            data.doctorIds = doctor
-            data.save()
+            data.doctorIds = doctor;
+            data.save();
 
             const mailOptions = {
                 from: "anshikthind@gmail.com",
@@ -440,5 +470,6 @@ module.exports = {
     uploadMedicine,
     getAllMedicine,
     buyMedicine,
-    getAllAppointmentDoctorPerspective
+    getAllAppointmentDoctorPerspective,
+    DoctorPerspectiveUpdateAppointment,
 };
