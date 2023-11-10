@@ -331,42 +331,46 @@ const sendAllAppointments = async (req, res) => {
 };
 const acceptDoctorByUser = async (req, res) => {
     try {
-
         const userId = req.user;
         const { doctorId, _id } = req.body;
         const data = await Appointment.findById(_id);
         const user = await User.findById(userId);
-        const doctorName = await User.findById(doctorId);
-        if (data.check === "") {
+        const doctorName = await User.findOne({ _id: doctorId });
+
+        if (!data.check) {
             doctorName.Accecpted = doctorName.Accecpted + 1;
-            doctorName.AccecptedAppointments.push(_id)
+            doctorName.AccecptedAppointments.push(_id);
             doctorName.save();
             data.check = doctorId;
             data.save();
-            let doctor = data.doctorIds.filter((e) => e.doctorId == doctorId);
-            let nonAcceptedDoctor = data.doctorIds.filter((e) => e.doctorId != doctorId);
-            nonAcceptedDoctor.map(async (each) => {
-                const k = await User.findById(e.doctorId);
-                k.RejectedAppointments.push(_id);
-                k.Rejected = k.Rejected + 1;
-                k.save();
-            });
-            doctor = doctor[0];
+
+            const nonAcceptedDoctorPromises = data.doctorIds
+                .filter((e) => e.doctorId !== doctorId)
+                .map(async (each) => {
+                    const k = await User.findOne({ _id: each.doctorId });
+                    k.RejectedAppointments.push(_id);
+                    k.Rejected = k.Rejected + 1;
+                    k.save();
+                });
+
+            await Promise.all(nonAcceptedDoctorPromises);
+
+            const doctor = data.doctorIds.find((e) => e.doctorId === doctorId);
 
             const mailOptions = {
-                from: "anshikthind@gmail.com", // Sender's email
-                to: user.email, // Recipient's email
+                from: "anshikthind@gmail.com",
+                to: user.email,
                 subject: "Your Appointment Details",
-                text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${doctor.first_name} ${doctor.last_name} specialized in ${doctor.specialization} `,
+                text: `Your Appointment time is ${doctor.time} ${doctor.date} with ${doctorName.first_name} ${doctorName.last_name} specialized in ${doctor.specialization}`,
             };
 
             const mailOption = {
-                from: "anshikthind@gmail.com", // Sender's email
-                to: doctorName.email, // Recipient's email
+                from: "anshikthind@gmail.com",
+                to: doctorName.email,
                 subject: "Your Appointment Details",
-                text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${user.first_name} ${user.last_name}  `,
+                text: `Your Appointment time is ${doctor.time} ${doctor.date} with ${user.first_name} ${user.last_name}`,
             };
-            // Send the email
+
             transporter.sendMail(mailOption, (error, info) => {
                 if (error) {
                     console.log("Email verification error: " + error);
@@ -374,6 +378,7 @@ const acceptDoctorByUser = async (req, res) => {
                     console.log("Email sent: " + info.response);
                 }
             });
+
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log("Email verification error: " + error);
@@ -381,12 +386,13 @@ const acceptDoctorByUser = async (req, res) => {
                     console.log("Email sent: " + info.response);
                 }
             });
+
             res.send("done");
-        }
-        else {
+        } else {
             res.send("done");
         }
     } catch (error) {
+        console.error(error);
         res.status(404).send("err");
     }
 };
