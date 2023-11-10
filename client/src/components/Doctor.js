@@ -87,21 +87,32 @@ const DoctorPage = () => {
 
     return (
         <>
-            <div className="container mx-auto">
+            <div className="">
                 <nav className="bg-red-500 p-4 flex items-center justify-between">
                     <div className="text-2xl text-white font-semibold">
                         Doctor Portal Page
                     </div>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            localStorage.removeItem("user");
-                            navigate("/");
-                        }}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-                    >
-                        Sign Out
-                    </button>
+                    <div className="flex flex-row gap-2">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                navigate("/profile");
+                            }}
+                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                        >
+                            Profile
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                localStorage.removeItem("user");
+                                navigate("/");
+                            }}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+                        >
+                            Sign Out
+                        </button>
+                    </div>
                 </nav>
                 <h1 className="text-2xl font-bold my-4">Appointments</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

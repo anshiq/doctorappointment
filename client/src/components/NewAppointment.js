@@ -65,23 +65,35 @@ function NewAppointment() {
 
     return (
         <>
-            <div className="container mx-auto mt-8">
+            <div className="">
                 {user.first_name ? (
                     <>
-                        <nav className="bg-red-200 p-4 flex items-center justify-between">
+                        <nav className="bg-red-500 p-4 flex w-full items-center justify-between">
                             <div className="text-2xl text-white font-semibold">
                                 {`${user.first_name} ${user.last_name}`}
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    localStorage.removeItem("user");
-                                    navigate("/");
-                                }}
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-                            >
-                                Sign Out
-                            </button>
+                            <div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        // localStorage.removeItem("user");
+                                        navigate("/buy");
+                                    }}
+                                    className="bg-green-500 mr-4 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                                >
+                                    Buy Medicines
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        localStorage.removeItem("user");
+                                        navigate("/");
+                                    }}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
                         </nav>
                         <form
                             onSubmit={handleSubmit}

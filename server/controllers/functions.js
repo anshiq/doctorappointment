@@ -7,6 +7,29 @@ const {
     sendJwtToken,
 } = require("../middleware/middleware");
 
+const getAllAppointmentDoctorPerspective = async (req, res) => {
+    try {
+        const userId = req.user;
+        const data = await User.findById(userId);
+        const acc = data.AccecptedAppointments;
+        const rej = data.RejectedAppointments;
+
+        const accp = await Promise.all(acc.map(async (each) => {
+            const dk = await Appointment.findById(each);
+            return dk;
+        }));
+
+        const rejp = await Promise.all(rej.map(async (each) => {
+            const dk = await Appointment.findById(each);
+            return dk;
+        }));
+
+        res.send({ acceptedArray: accp, rejectedArray: rejp, user: data });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+};
 const buyMedicine = async (req, res) => {
     const { id, buyyerID } = req.body;
     console.log(id);
@@ -79,9 +102,8 @@ const uploadMedicine = async (req, res) => {
     }
 };
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    // console.log(req.body);
     try {
+        const { email, password } = req.body;
         const data = await User.findOne({ email: email });
         if (!data) {
             res
@@ -104,7 +126,7 @@ const loginUser = async (req, res) => {
                     contact: data.contact,
                     verified: data.verified,
                     role: data.role,
-                    specialization: data.specialization
+                    specialization: data.specialization,
                 });
             } else {
                 res.status(200).send({
@@ -199,7 +221,7 @@ const signupUser = async (req, res) => {
         dob,
         gender,
         address,
-        specialization
+        specialization,
     } = req.body;
     password = await encryptPassword(password);
     const verificationToken = generateVerificationToken();
@@ -217,6 +239,8 @@ const signupUser = async (req, res) => {
             role: role,
             contact: contact,
             verified: false,
+            Accecpted: 0,
+            Rejected: 0,
         });
         if (user) {
             sendVerificationEmail(email, verificationToken);
@@ -233,8 +257,9 @@ const createUserAppointment = async (req, res) => {
     // console.log(req.user);
     // console.log("Appointment create");
     // console.log(req.body);
-    const { first_name, problem, last_name, gender, dob, contact, date, time } = req.body;
-    console.log(problem)
+    const { first_name, problem, last_name, gender, dob, contact, date, time } =
+        req.body;
+    console.log(problem);
     const appointmentDetails = await Appointment.create({
         userId: req.user,
         first_name: first_name,
@@ -245,7 +270,7 @@ const createUserAppointment = async (req, res) => {
         contact: contact,
         date: date,
         time: time,
-        check: 0,
+        check: "",
     });
     if (appointmentDetails) {
         res.send({ appointmentRegistered: true });
@@ -257,7 +282,7 @@ const getUserAppointment = async (req, res) => {
     const allappointments = await Appointment.find({
         userId: req.user,
     });
-    // console.log("Appointment got");
+    console.log("Appointment got");
     res.send(allappointments);
     // try {
     //     const oneTaskDetails = await Appointment.findOne({ _id: id });
@@ -297,7 +322,7 @@ const updateUserAppointment = async (req, res) => {
     }
 };
 const sendAllAppointments = async (req, res) => {
-    const data = await Appointment.find({ check: 0 });
+    const data = await Appointment.find({ check: "" });
     if (data) {
         res.send(data);
     } else {
@@ -305,45 +330,65 @@ const sendAllAppointments = async (req, res) => {
     }
 };
 const acceptDoctorByUser = async (req, res) => {
-    const userId = req.user;
-    const { doctorId, _id } = req.body;
-    const data = await Appointment.findById(_id);
-    const user = await User.findById(userId);
-    const doctorName = await User.findById(doctorId);
-    data.check = 1;
-    data.save();
-    let doctor = data.doctorIds.filter((e) => e.doctorId == doctorId);
-    doctor = doctor[0];
+    try {
 
-    const mailOptions = {
-        from: "anshikthind@gmail.com", // Sender's email
-        to: user.email, // Recipient's email
-        subject: "Your Appointment Details",
-        text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${doctor.first_name} ${doctor.last_name} specialized in ${doctor.specialization} `,
-    };
+        const userId = req.user;
+        const { doctorId, _id } = req.body;
+        const data = await Appointment.findById(_id);
+        const user = await User.findById(userId);
+        const doctorName = await User.findById(doctorId);
+        if (data.check === "") {
+            doctorName.Accecpted = doctorName.Accecpted + 1;
+            doctorName.AccecptedAppointments.push(_id)
+            doctorName.save();
+            data.check = doctorId;
+            data.save();
+            let doctor = data.doctorIds.filter((e) => e.doctorId == doctorId);
+            let nonAcceptedDoctor = data.doctorIds.filter((e) => e.doctorId != doctorId);
+            nonAcceptedDoctor.map(async (each) => {
+                const k = await User.findById(e.doctorId);
+                k.RejectedAppointments.push(_id);
+                k.Rejected = k.Rejected + 1;
+                k.save();
+            });
+            doctor = doctor[0];
 
-    const mailOption = {
-        from: "anshikthind@gmail.com", // Sender's email
-        to: doctorName.email, // Recipient's email
-        subject: "Your Appointment Details",
-        text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${user.first_name} ${user.last_name}  `,
-    };
-    // Send the email
-    transporter.sendMail(mailOption, (error, info) => {
-        if (error) {
-            console.log("Email verification error: " + error);
-        } else {
-            console.log("Email sent: " + info.response);
+            const mailOptions = {
+                from: "anshikthind@gmail.com", // Sender's email
+                to: user.email, // Recipient's email
+                subject: "Your Appointment Details",
+                text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${doctor.first_name} ${doctor.last_name} specialized in ${doctor.specialization} `,
+            };
+
+            const mailOption = {
+                from: "anshikthind@gmail.com", // Sender's email
+                to: doctorName.email, // Recipient's email
+                subject: "Your Appointment Details",
+                text: ` Your Appointment time is ${doctor.time} ${doctor.date} with ${user.first_name} ${user.last_name}  `,
+            };
+            // Send the email
+            transporter.sendMail(mailOption, (error, info) => {
+                if (error) {
+                    console.log("Email verification error: " + error);
+                } else {
+                    console.log("Email sent: " + info.response);
+                }
+            });
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log("Email verification error: " + error);
+                } else {
+                    console.log("Email sent: " + info.response);
+                }
+            });
+            res.send("done");
         }
-    });
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log("Email verification error: " + error);
-        } else {
-            console.log("Email sent: " + info.response);
+        else {
+            res.send("done");
         }
-    });
-    res.send("done");
+    } catch (error) {
+        res.status(404).send("err");
+    }
 };
 const acceptUserAppointment = async (req, res) => {
     const { _id, time, date } = req.body;
@@ -387,4 +432,5 @@ module.exports = {
     uploadMedicine,
     getAllMedicine,
     buyMedicine,
+    getAllAppointmentDoctorPerspective
 };

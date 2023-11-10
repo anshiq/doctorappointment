@@ -4,8 +4,7 @@ const MedicineSchema = new mongoose.Schema({
     treat: String,
     price: String,
     seller: String,
-    address: String
-
+    address: String,
 });
 const AppointmentSchema = new mongoose.Schema({
     problem: String,
@@ -42,7 +41,7 @@ const AppointmentSchema = new mongoose.Schema({
         // required: true
     },
     check: {
-        type: Number,
+        type: String,
     },
     time: {
         type: String,
@@ -66,9 +65,13 @@ const LoginSchema = new mongoose.Schema({
     gender: String,
     address: String,
     verified: Boolean,
+    AccecptedAppointments: Array,
+    RejectedAppointments: Array,
+    Accecpted: Number,
     verificationToken: {
         type: String,
     },
+    Rejected: Number,
 });
 const Appointment = mongoose.model("taskDetails", AppointmentSchema);
 const User = mongoose.model("loginDetails", LoginSchema);

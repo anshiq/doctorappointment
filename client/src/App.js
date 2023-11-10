@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DoctorPage from "./components/Doctor";
 import MedicSell from "./components/MedicSell";
 import GetAllMedicine from "./components/AllMedicine";
+import DoctorProfile from "./components/DoctorProfile";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -32,7 +33,10 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     {user && user.role === "doctor" ? (
-                        <Route path="/*" element={<DoctorPage />} />
+                        <>
+                            <Route path="/*" element={<DoctorPage />} />
+                            <Route path="/profile" element={<DoctorProfile />} />
+                        </>
                     ) : (
                         <>
 

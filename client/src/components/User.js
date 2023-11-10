@@ -8,6 +8,7 @@ function UserHome() {
     const [editAppointment, setEditAppointment] = useState(null);
     const [accept, setAccept] = useState(false);
     const [allAppointments, setAllAppointments] = useState([]);
+    const [allReadyAppointed, setAppointed] = useState(false)
     useEffect(() => {
         const user = localStorage.getItem("user");
         if (user) {
@@ -25,7 +26,13 @@ function UserHome() {
                     },
                 )
                 .then((data) => {
-                    console.log(data.data);
+                    data.data.map((each) => {
+                        if (each.check === "") {
+                            setAppointed(true)
+                        }
+                        return
+                    })
+                    // console.log(data.data);
                     setAllAppointments(data.data);
                 })
                 .catch((err) => {
@@ -144,15 +151,25 @@ function UserHome() {
                         </div>
                     </nav>
                     <div className="w-1/2  my-4 p-4 flex flex-col gap-5 items-center justify-center">
-                        <button
-                            className="px-6 py-3 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md"
-                            type="button"
-                            onClick={() => {
-                                navigate("/newappointment");
-                            }}
-                        >
-                            New Appointment
-                        </button>
+                        {
+                            allReadyAppointed ?
+                                <button
+                                    className="px-6 py-3 bg-red-500  text-white font-semibold rounded-md shadow-md"
+                                    type="button"
+                                >
+                                    Already Appointment in Progress .....
+                                </button>
+                                :
+                                <button
+                                    className="px-6 py-3 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md"
+                                    type="button"
+                                    onClick={() => {
+                                        navigate("/newappointment");
+                                    }}
+                                >
+                                    New Appointment
+                                </button>
+                        }
                         <div className="flex flex-col gap-2">
                             <span className="px-6 py-3 bg-green-500  text-white w-full font-semibold rounded-md ">
                                 Your Appointments
