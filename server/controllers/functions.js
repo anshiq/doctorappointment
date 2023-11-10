@@ -355,13 +355,15 @@ const acceptDoctorByUser = async (req, res) => {
 
             await Promise.all(nonAcceptedDoctorPromises);
 
-            const doctor = data.doctorIds.find((e) => e.doctorId === doctorId);
+            const doctor = data.doctorIds.filter((e) => e.doctorId === doctorId);
+            data.doctorIds = doctor
+            data.save()
 
             const mailOptions = {
                 from: "anshikthind@gmail.com",
                 to: user.email,
                 subject: "Your Appointment Details",
-                text: `Your Appointment time is ${doctor.time} ${doctor.date} with ${doctorName.first_name} ${doctorName.last_name} specialized in ${doctor.specialization}`,
+                text: `Your Appointment time is ${doctor[0].time} ${doctor[0].date} with ${doctorName.first_name} ${doctorName.last_name} specialized in ${doctor[0].specialization}`,
             };
 
             const mailOption = {
