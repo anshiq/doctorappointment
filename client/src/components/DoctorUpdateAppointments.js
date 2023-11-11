@@ -113,6 +113,8 @@ export default function DoctorUpdateAppointments() {
             )
             .then((response) => {
                 console.log(response.data);
+                setDate_time_temp(null)
+
             });
     };
     // return <></>
