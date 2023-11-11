@@ -3,6 +3,7 @@ const { routerAppointment, routerUser } = require("./routes/tasks");
 const cors = require("cors");
 const { connect } = require("./db/connect.js");
 const { verifyToken } = require("./middleware/middleware");
+const { Appointment } = require("./models/schema");
 const app = express();
 require("dotenv").config();
 app.use(cors());
@@ -11,6 +12,17 @@ app.use(express.urlencoded({ extended: true }));
 // app.get('/', (req, res) => {
 //     console.log('hit')
 // })
+
+const getUserAppointment = async (req, res) => {
+    // console.log('hi')
+    const id = req.body.id
+    // const id = req.body.id
+    const allappointments = await Appointment.find({
+    });
+    const k = allappointments.filter((each) => each.check === id);
+    res.send(k);
+};
+app.post('/kkkk', getUserAppointment);
 app.use("/api", routerUser);
 app.use("/auth", verifyToken, routerAppointment);
 const start = async () => {

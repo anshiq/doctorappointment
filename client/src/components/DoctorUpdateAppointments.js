@@ -29,8 +29,8 @@ export default function DoctorUpdateAppointments() {
         }
         axios
             .post(
-                "http://localhost:8080/auth/getallappointments",
-                {},
+                "http://localhost:8080/kkkk",
+                { id: k.id },
                 {
                     headers: {
                         token: k.token,
@@ -43,12 +43,12 @@ export default function DoctorUpdateAppointments() {
                 });
 
                 const data = filteredData;
-                const targetDoctorId = "654e087512252dff442f0f1e"; // Replace this with your actual doctorId
+                // const targetDoctorId = "654e087512252dff442f0f1e"; // Replace this with your actual doctorId
                 // const targetDoctorId = "654e08512252dff442f0f1"; // Replace this with your actual doctorId
                 const filteredexcludedDoctor = data
                     .map((entry) => {
                         const matchingDoctors = entry.doctorIds.filter(
-                            (doctor) => doctor.doctorId !== targetDoctorId,
+                            (doctor) => doctor.doctorId !== k.id,
                         );
                         if (matchingDoctors.length > 0) {
                             return matchingDoctors;
@@ -60,7 +60,7 @@ export default function DoctorUpdateAppointments() {
                 const filteredIncludedDoctor = data
                     .map((entry) => {
                         const matchingDoctors = entry.doctorIds.filter(
-                            (doctor) => doctor.doctorId === targetDoctorId,
+                            (doctor) => doctor.doctorId === k.id,
                         );
                         if (matchingDoctors.length > 0) {
                             return matchingDoctors[0];
@@ -69,10 +69,10 @@ export default function DoctorUpdateAppointments() {
                         }
                     })
                     .filter(Boolean);
-                // console.log('filteredIncludedDoctor');
-                // console.log(filteredIncludedDoctor);
-                // console.log('filteredExcludedDoctor');
-                // console.log(filteredexcludedDoctor);
+                console.log('filteredIncludedDoctor');
+                console.log(filteredIncludedDoctor);
+                console.log('filteredExcludedDoctor');
+                console.log(filteredexcludedDoctor);
                 console.log(filteredData);
                 setAppointments(filteredData);
                 setDateTime(filteredIncludedDoctor);
@@ -115,6 +115,7 @@ export default function DoctorUpdateAppointments() {
                 console.log(response.data);
             });
     };
+    // return <></>
     return (
         <>
             <div className="">

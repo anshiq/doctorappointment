@@ -374,20 +374,19 @@ const acceptDoctorByUser = async (req, res) => {
             data.check = doctorId;
             data.save();
 
-            const nonAcceptedDoctorPromises = data.doctorIds
-                .filter((e) => e.doctorId !== doctorId)
-                .map(async (each) => {
+            for (const each of data.doctorIds) {
+                if (each.doctorId !== doctorId) {
                     const k = await User.findOne({ _id: each.doctorId });
                     k.RejectedAppointments.push(_id);
                     k.Rejected = k.Rejected + 1;
-                    k.save();
-                });
-
-            await Promise.all(nonAcceptedDoctorPromises);
-
+                    await k.save();
+                }
+            }
+            // Filter and save the accepted doctor in a synchronous manner
             const doctor = data.doctorIds.filter((e) => e.doctorId === doctorId);
             data.doctorIds = doctor;
-            data.save();
+            await data.save();
+
 
             const mailOptions = {
                 from: "anshikthind@gmail.com",
