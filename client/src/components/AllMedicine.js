@@ -56,7 +56,7 @@ const GetAllMedicine = () => {
 
             if (response.status === 200) {
                 alert('success')
-                // navigate('/thank-you');
+                navigate('/patientMedicProfile');
             } else {
                 console.error('Failed to submit data');
             }

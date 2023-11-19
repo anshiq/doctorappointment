@@ -76,8 +76,7 @@ function NewAppointment() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        // localStorage.removeItem("user");
-                                        navigate("/buy");
+                                        navigate("/order-medicine");
                                     }}
                                     className="bg-green-500 mr-4 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
                                 >

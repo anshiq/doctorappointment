@@ -11,7 +11,8 @@ const MedicineSchema = new mongoose.Schema({
     price: String,
     seller: String,
     address: String,
-    proccess_order: Number
+    proccess_order: Number,
+    medicines: String
 });
 const AppointmentSchema = new mongoose.Schema({
     problem: String,

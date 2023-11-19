@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function AllMedicOrders() {
-
     const [medicineData, setMedicineData] = useState([]);
     const [userId, setUserId] = useState("");
     const [editData, setEditData] = useState(null);
-    const [orderDetails, setOrderDetails] = useState({ price: "", medicines: "", address: "" })
+    const [orderDetails, setOrderDetails] = useState({});
 
     const fetchData = async () => {
         const userData = localStorage.getItem("user");
@@ -31,10 +30,9 @@ function AllMedicOrders() {
     };
     const handleOrderDetails = (e) => {
         setOrderDetails((prev) => {
-            return ({ ...prev, [e.target.name]: e.target.value })
-        })
-
-    }
+            return { ...prev, [e.target.name]: e.target.value };
+        });
+    };
 
     const proccessOrder = async (data) => {
         const id = data;
@@ -47,18 +45,23 @@ function AllMedicOrders() {
         }
     };
     const handleOrderSubmit = async (e) => {
-        e.preventDefault()
-        const response = await axios.post("http://localhost:8080/proccessOrder", {
+        e.preventDefault();
+        const response = await axios.post("http://localhost:8080/submitOrder", {
+            id: editData._id,
+            treat: orderDetails.treat,
+            seller: orderDetails.seller,
+            price: orderDetails.price,
+            address: orderDetails.address,
+            medicines: orderDetails.medicines,
         });
         if (response.status === 200) {
-            alert("Successfully processed");
+            console.log(response.data)
         }
-
-    }
+    };
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [editData]);
 
     return (
         <div className="max-w-screen-xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-md">
@@ -122,7 +125,10 @@ function AllMedicOrders() {
                     open
                     className="fixed inset-0 z-10 flex justify-center items-center h-screen overflow-y-scroll w-screen bg-black bg-opacity-40"
                 >
-                    <form onSubmit={handleOrderSubmit} className="bg-white w-[50%] p-8 rounded-md">
+                    <form
+                        onSubmit={handleOrderSubmit}
+                        className="bg-white w-[50%] p-8 rounded-md"
+                    >
                         <p className="text-lg font-semibold">Medicine Recipt Image: </p>
                         <img
                             src={`http://localhost:8080/${editData.path}`}
@@ -134,11 +140,36 @@ function AllMedicOrders() {
                         </p>
                         <p className="text-gray-600">Patient Email: {editData.email}</p>
                         <div className="flex flex-col gap-2">
-                            <input name="medicines" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
-                            <input name="treat" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
-                            <input name="seller" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
-                            <input name="price" placeholder="Price" type="text" onChange={handleOrderDetails} />
-                            <textarea name="address" placeholder="Your Medic Address ..." type="text" onChange={handleOrderDetails} />
+                            <textarea
+                                name="medicines"
+                                placeholder="Medicines Names and all details eg. Paracitamole (2 times a day),... "
+                                onChange={handleOrderDetails}
+                                type="text"
+                            />
+                            <input
+                                name="treat"
+                                placeholder="Treatment"
+                                onChange={handleOrderDetails}
+                                type="text"
+                            />
+                            <input
+                                name="seller"
+                                placeholder="Your Name"
+                                onChange={handleOrderDetails}
+                                type="text"
+                            />
+                            <input
+                                name="price"
+                                placeholder="Price"
+                                type="text"
+                                onChange={handleOrderDetails}
+                            />
+                            <textarea
+                                name="address"
+                                placeholder="Your Medic Address ... (4444 , streat , california)"
+                                type="text"
+                                onChange={handleOrderDetails}
+                            />
                         </div>
                         <div className="flex flex-row gap-2">
                             <button
