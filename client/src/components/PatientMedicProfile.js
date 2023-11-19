@@ -16,7 +16,7 @@ const PatientMedicineProfile = () => {
 
             }
             else {
-                navigate('/')
+                // navigate('/')
             }
             const response = await axios.post('http://localhost:8080/patientMediProfile', { userId: m });
             if (response.status === 200) {

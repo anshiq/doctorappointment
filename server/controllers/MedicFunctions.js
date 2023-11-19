@@ -7,7 +7,8 @@ const getPatientRecipt = async (req, res) => {
         phoneNumber: phoneNumber,
         email: email,
         patientId: userId,
-        path: file
+        path: file,
+        proccess_order: 0
     });
     if (data) {
         res.status(200).send(data)
@@ -36,8 +37,23 @@ const getPatientReciptProfile = async (req, res) => {
         res.status(404).send(data);
     }
 }
+const proccessMedicineOrder = async (req, res) => {
+    console.log('hit')
+    try {
+        const { medicId, itemId } = req.body
+        const data = await Medicine.findById(itemId);
+        console.log(data, medicId, itemId)
+        data.proccess_order = 1;
+        data.medicId = medicId;
+        data.save()
+        res.send(data)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+}
 module.exports = {
     getPatientRecipt,
     getMedicSideRecipt,
-    getPatientReciptProfile
+    getPatientReciptProfile,
+    proccessMedicineOrder
 };
