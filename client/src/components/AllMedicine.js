@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ const GetAllMedicine = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [imagePreview, setImagePreview] = useState(null);
+    const [token, settoken] = useState(null);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -25,15 +26,26 @@ const GetAllMedicine = () => {
             setImagePreview(null);
         }
     };
+    useEffect(() => {
+        const data = localStorage.getItem('user')
+        if (data) {
+
+            const k = JSON.parse(data)
+            settoken(k.id)
+        }
+        else {
+            navigate('/')
+        }
+    }, [])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         const formData = new FormData();
         formData.append('file', file);
         formData.append('name', name);
         formData.append('phoneNumber', phoneNumber);
         formData.append('email', email);
+        formData.append('userId', token);
 
         try {
             const response = await axios.post('http://localhost:8080/medic', formData, {
