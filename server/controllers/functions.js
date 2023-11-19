@@ -7,6 +7,12 @@ const {
     sendJwtToken,
 } = require("../middleware/middleware");
 
+const getUserAppointmentx = async (req, res) => {
+    const id = req.body.id;
+    const allappointments = await Appointment.find({});
+    const k = allappointments.filter((each) => each.check === id);
+    res.send(k);
+};
 const DoctorPerspectiveUpdateAppointment = async (req, res) => {
     const { _id, time, date } = req.body;
     const appointmentId = _id;
@@ -471,4 +477,5 @@ module.exports = {
     buyMedicine,
     getAllAppointmentDoctorPerspective,
     DoctorPerspectiveUpdateAppointment,
+    getUserAppointmentx
 };

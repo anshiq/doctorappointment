@@ -1,38 +1,37 @@
 const express = require("express");
+const path = require('path')
+const fs = require("fs");
 const { routerAppointment, routerUser } = require("./routes/tasks");
 const cors = require("cors");
 const { connect } = require("./db/connect.js");
 const { verifyToken } = require("./middleware/middleware");
-const { Appointment } = require("./models/schema");
+const { upload } = require("./middleware/Multer");
+const { getPatientRecipt } = require("./controllers/MedicFunctions");
+const { getUserAppointmentx } = require("./controllers/functions");
 const app = express();
 require("dotenv").config();
 app.use(cors());
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: true }));
-// app.get('/', (req, res) => {
-//     console.log('hit')
-// })
-
-const getUserAppointment = async (req, res) => {
-    // console.log('hi')
-    const id = req.body.id
-    // const id = req.body.id
-    const allappointments = await Appointment.find({
-    });
-    const k = allappointments.filter((each) => each.check === id);
-    res.send(k);
-};
-app.post('/kkkk', getUserAppointment);
+app.post("/medic", upload.single("file"), getPatientRecipt);
+// app.post("/getmedic", getPatientRecipt);
+app.post("/kkkk", getUserAppointmentx);
 app.use("/api", routerUser);
 app.use("/auth", verifyToken, routerAppointment);
 const start = async () => {
     try {
         const db_url = process.env.mongod_url;
+        const uploadsDir = path.join(__dirname, 'uploads');
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir);
+            console.log("Uploads directory created");
+        } else {
+            console.log("Uploads directory already exists");
+        }
         const port = process.env.PORT || 8080;
-        // await connect(db_url);
         connect(db_url);
         app.listen(port, () =>
-            console.log(`server up n running on ${port} and connected to db....`)
+            console.log(`server up n running on ${port} and connected to db....`),
         );
     } catch (error) {
         console.log(error);

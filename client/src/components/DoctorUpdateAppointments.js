@@ -148,6 +148,7 @@ export default function DoctorUpdateAppointments() {
                             type="button"
                             onClick={() => {
                                 localStorage.removeItem("user");
+                                localStorage.clear("user");
                                 navigate("/");
                             }}
                             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"

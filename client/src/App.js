@@ -44,7 +44,7 @@ function App() {
 
                             {user && user.role === "medic" ? (
                                 <>
-                                    <Route path="/*" element={<GetAllMedicine />} />
+                                    <Route path="/home" element={<GetAllMedicine />} />
                                     <Route path="/medicsell" element={<MedicSell />} />
                                 </>
                             ) : (

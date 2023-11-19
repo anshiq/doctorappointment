@@ -14,7 +14,7 @@ const Register = () => {
         dob: "",
         gender: "",
         address: "",
-        specialization: ""
+        specialization: "",
     });
 
     const navigate = useNavigate();
@@ -29,6 +29,8 @@ const Register = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
+        localStorage.removeItem("user");
+        localStorage.clear("user");
         axios
             .post("http://localhost:8080/api/signup", user) // Update the server URL
             .then((response) => {

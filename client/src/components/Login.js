@@ -61,6 +61,8 @@ function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
         console.log(credentials);
+        localStorage.removeItem("user");
+        localStorage.clear("user");
         axios
             .post("http://localhost:8080/api/login", credentials)
             .then((response) => {
