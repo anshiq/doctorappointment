@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function AllMedicOrders() {
+
     const [medicineData, setMedicineData] = useState([]);
     const [userId, setUserId] = useState("");
     const [editData, setEditData] = useState(null);
+    const [orderDetails, setOrderDetails] = useState({ price: "", medicines: "", address: "" })
 
     const fetchData = async () => {
         const userData = localStorage.getItem("user");
@@ -27,6 +29,12 @@ function AllMedicOrders() {
             }
         }
     };
+    const handleOrderDetails = (e) => {
+        setOrderDetails((prev) => {
+            return ({ ...prev, [e.target.name]: e.target.value })
+        })
+
+    }
 
     const proccessOrder = async (data) => {
         const id = data;
@@ -38,6 +46,15 @@ function AllMedicOrders() {
             alert("Successfully processed");
         }
     };
+    const handleOrderSubmit = async (e) => {
+        e.preventDefault()
+        const response = await axios.post("http://localhost:8080/proccessOrder", {
+        });
+        if (response.status === 200) {
+            alert("Successfully processed");
+        }
+
+    }
 
     useEffect(() => {
         fetchData();
@@ -93,7 +110,6 @@ function AllMedicOrders() {
                                     )}
                                 </>
                             )}
-                            {/* Display other fields as needed */}
                         </div>
                     ))
                 ) : (
@@ -104,25 +120,42 @@ function AllMedicOrders() {
             {editData && (
                 <dialog
                     open
-                    className="fixed inset-0 z-10 flex justify-center items-center h-screen w-screen bg-black bg-opacity-40"
+                    className="fixed inset-0 z-10 flex justify-center items-center h-screen overflow-y-scroll w-screen bg-black bg-opacity-40"
                 >
-                    <div className="bg-white w-[90%] p-8 rounded-md">
+                    <form onSubmit={handleOrderSubmit} className="bg-white w-[50%] p-8 rounded-md">
                         <p className="text-lg font-semibold">Medicine Recipt Image: </p>
                         <img
                             src={`http://localhost:8080/${editData.path}`}
                             alt={editData.name}
                             className="w-full  object-cover rounded-md mb-4"
                         />
-                        <p className="text-lg font-semibold">Patient Name: {editData.name}</p>
+                        <p className="text-lg font-semibold">
+                            Patient Name: {editData.name}
+                        </p>
                         <p className="text-gray-600">Patient Email: {editData.email}</p>
-                        <button
-                            type="button"
-                            onClick={() => setEditData(null)}
-                            className="bg-gray-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        >
-                            Close
-                        </button>
-                    </div>
+                        <div className="flex flex-col gap-2">
+                            <input name="medicines" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
+                            <input name="treat" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
+                            <input name="seller" placeholder="Medicines Names" onChange={handleOrderDetails} type="text" />
+                            <input name="price" placeholder="Price" type="text" onChange={handleOrderDetails} />
+                            <textarea name="address" placeholder="Your Medic Address ..." type="text" onChange={handleOrderDetails} />
+                        </div>
+                        <div className="flex flex-row gap-2">
+                            <button
+                                type="submit"
+                                className="bg-green-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-green-500 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500"
+                            >
+                                Submit
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setEditData(null)}
+                                className="bg-gray-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </form>
                 </dialog>
             )}
         </div>

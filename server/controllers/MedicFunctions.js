@@ -51,9 +51,13 @@ const proccessMedicineOrder = async (req, res) => {
         res.status(400).send(error)
     }
 }
+const submitOrder = async (req, res) => {
+
+}
 module.exports = {
     getPatientRecipt,
     getMedicSideRecipt,
     getPatientReciptProfile,
-    proccessMedicineOrder
+    proccessMedicineOrder,
+    submitOrder
 };

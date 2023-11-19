@@ -6,6 +6,7 @@ const MedicineSchema = new mongoose.Schema({
     patientId: String,
     medicId: String,
     phoneNumber: String,
+    medicineName: String,
     treat: String,
     price: String,
     seller: String,
