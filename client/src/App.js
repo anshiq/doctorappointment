@@ -15,6 +15,7 @@ import DoctorProfile from "./components/DoctorProfile";
 import DoctorUpdateAppointments from "./components/DoctorUpdateAppointments";
 import PatientMedicineProfile from "./components/PatientMedicProfile";
 import AllMedicOrders from "./components/AllMedicOrders";
+import OrderMedicHistory from "./components/OrderMedicHistoryProfile";
 
 function App() {
     return <>
@@ -67,6 +68,7 @@ function K() {
                 <Router>
                     <Routes>
                         <Route path="/*" element={<AllMedicOrders />} />
+                        <Route path="/order-history" element={<OrderMedicHistory />} />
                         {/* <Route path="/*" element={<GetAllMedicine />} /> */}
                     </Routes>
                 </Router>

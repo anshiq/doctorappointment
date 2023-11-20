@@ -20,6 +20,17 @@ const getMedicSideRecipt = async (req, res) => {
         res.status(404).send(data);
     }
 }
+const getMedicReciptProfile = async (req, res) => {
+    console.log('hi')
+    const { userId } = req.body
+    const data = await Medicine.find({ medicId: userId });
+    if (data) {
+        res.status(200).send(data)
+    }
+    else {
+        res.status(404).send(data);
+    }
+}
 const getPatientReciptProfile = async (req, res) => {
     const { userId } = req.body
     const data = await Medicine.find({ patientId: userId });
@@ -93,7 +104,9 @@ module.exports = {
     getPatientRecipt,
     getMedicSideRecipt,
     getPatientReciptProfile,
+    getMedicReciptProfile,
     proccessMedicineOrder,
-    submitOrder
+    submitOrder,
+    getMedicReciptProfile
 };
 

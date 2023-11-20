@@ -6,13 +6,6 @@ const PatientMedicineProfile = () => {
     // const [userData, setUserData] = useState({ first_name: "Medicine Order", last_name: "Profile" });
     const [userData, setUserData] = useState({ first_name: "Medicine Order", last_name: "Profile" });
     const [medicineData, setMedicineData] = useState([]);
-    useEffect(() => {
-        const user = localStorage.getItem("user");
-        if (user) {
-            const k = JSON.parse(user);
-            setUserData(k);
-        }
-    }, []);
     const navigate = useNavigate()
     const fetchData = async () => {
         try {
@@ -25,7 +18,7 @@ const PatientMedicineProfile = () => {
                 // navigate('/')
             }
             const response = await axios.post(
-                "http://localhost:8080/patientMediProfile",
+                "http://localhost:8080/medicMediProfile",
                 { userId: m },
             );
             if (response.status === 200) {
@@ -36,6 +29,11 @@ const PatientMedicineProfile = () => {
         }
     };
     useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (user) {
+            const k = JSON.parse(user);
+            setUserData(k);
+        }
         fetchData();
     }, []);
 
