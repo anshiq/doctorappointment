@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function AllMedicOrders() {
     const [medicineData, setMedicineData] = useState([]);
@@ -41,7 +42,7 @@ function AllMedicOrders() {
             itemId: id,
         });
         if (response.status === 200) {
-            alert("Successfully processed");
+            toast.success("Successfully processed");
         }
     };
     const handleOrderSubmit = async (e) => {
@@ -55,7 +56,7 @@ function AllMedicOrders() {
             medicines: orderDetails.medicines,
         });
         if (response.status === 200) {
-            console.log(response.data)
+            console.log(response.data);
         }
     };
 
@@ -66,7 +67,6 @@ function AllMedicOrders() {
     return (
         <div className="max-w-screen-xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-md">
             <h1 className="text-2xl font-semibold mb-6">Patient Medicine Profile</h1>
-
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {medicineData.length > 0 ? (
                     medicineData.map((medicine, index) => (
@@ -76,8 +76,10 @@ function AllMedicOrders() {
                                 alt={medicine.name}
                                 className="w-full h-40 object-cover rounded-md mb-2"
                             />
-                            <p className="text-lg font-semibold">Name: {medicine.name}</p>
-                            <p className="text-gray-600">Email: {medicine.email}</p>
+                            <p className="text-lg font-semibold">
+                                Patient Name: {medicine.name}
+                            </p>
+                            <p className="text-gray-600">Patient Email: {medicine.email}</p>
                             {medicine.proccess_order === 1 && medicine.medicId !== userId ? (
                                 <button
                                     type="button"
@@ -121,73 +123,79 @@ function AllMedicOrders() {
             </div>
 
             {editData && (
-                <dialog
-                    open
-                    className="fixed inset-0 z-10 flex justify-center items-center h-screen overflow-y-scroll w-screen bg-black bg-opacity-40"
-                >
+                <div className="fixed inset-0 z-10 flex justify-center items-center h-screen overflow-y-scroll bg-black bg-opacity-40">
                     <form
                         onSubmit={handleOrderSubmit}
-                        className="bg-white w-[50%] p-8 rounded-md"
+                        className="bg-white w-full sm:w-[50%] md:w-[40%] lg:w-[30%] p-8 rounded-md"
                     >
-                        <p className="text-lg font-semibold">Medicine Recipt Image: </p>
+                        <p className="text-lg font-semibold">Medicine Receipt Image:</p>
                         <img
                             src={`http://localhost:8080/${editData.path}`}
                             alt={editData.name}
-                            className="w-full  object-cover rounded-md mb-4"
+                            className="w-full object-cover rounded-md mb-4"
                         />
                         <p className="text-lg font-semibold">
                             Patient Name: {editData.name}
                         </p>
                         <p className="text-gray-600">Patient Email: {editData.email}</p>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-4">
+                            <label className="text-lg font-semibold">Medicine details:</label>
                             <textarea
                                 name="medicines"
-                                placeholder="Medicines Names and all details eg. Paracitamole (2 times a day),... "
+                                placeholder="Medicines Names and all details e.g., Paracetamol (2 times a day),..."
                                 onChange={handleOrderDetails}
-                                type="text"
+                                className="border rounded-md p-2"
                             />
+                            <label className="text-lg font-semibold">Treatment:</label>
                             <input
                                 name="treat"
                                 placeholder="Treatment"
                                 onChange={handleOrderDetails}
+                                className="border rounded-md p-2"
                                 type="text"
                             />
+                            <label className="text-lg font-semibold">Your Name:</label>
                             <input
                                 name="seller"
                                 placeholder="Your Name"
                                 onChange={handleOrderDetails}
+                                className="border rounded-md p-2"
                                 type="text"
                             />
+                            <label className="text-lg font-semibold">Medicine Profile:</label>
                             <input
                                 name="price"
                                 placeholder="Price"
-                                type="text"
                                 onChange={handleOrderDetails}
+                                className="border rounded-md p-2"
+                                type="text"
                             />
+                            <label className="text-lg font-semibold">Your Medic Address:</label>
                             <textarea
                                 name="address"
-                                placeholder="Your Medic Address ... (4444 , streat , california)"
-                                type="text"
+                                placeholder="Your Medic Address... (4444, street, California)"
                                 onChange={handleOrderDetails}
+                                className="border rounded-md p-2"
+                                type="text"
                             />
                         </div>
-                        <div className="flex flex-row gap-2">
+                        <div className="flex justify-end mt-4">
                             <button
                                 type="submit"
-                                className="bg-green-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-green-500 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500"
                             >
                                 Submit
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setEditData(null)}
-                                className="bg-gray-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                className="bg-gray-500 text-white px-4 py-2 ml-4 rounded-md hover:bg-gray-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >
                                 Close
                             </button>
                         </div>
                     </form>
-                </dialog>
+                </div>
             )}
         </div>
     );

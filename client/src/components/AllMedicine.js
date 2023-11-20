@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const GetAllMedicine = () => {
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ const GetAllMedicine = () => {
             });
 
             if (response.status === 200) {
-                alert('success')
+                toast.success('Success!!!')
                 navigate('/patientMedicProfile');
             } else {
                 console.error('Failed to submit data');
@@ -86,7 +87,7 @@ const GetAllMedicine = () => {
                     )}
                 </div>
                 <div>
-                    <label htmlFor="nameInput" className="block mb-1">Name</label>
+                    <label htmlFor="nameInput" className="block mb-1">Your Name</label>
                     <input
                         id="nameInput"
                         placeholder="Name..."
@@ -97,7 +98,7 @@ const GetAllMedicine = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="phoneInput" className="block mb-1">Phone Number</label>
+                    <label htmlFor="phoneInput" className="block mb-1">Your Phone Number</label>
                     <input
                         id="phoneInput"
                         placeholder="Phone Number ..."
@@ -108,7 +109,7 @@ const GetAllMedicine = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="emailInput" className="block mb-1">Email</label>
+                    <label htmlFor="emailInput" className="block mb-1">Your Email</label>
                     <input
                         id="emailInput"
                         placeholder="Email ..."
@@ -119,7 +120,7 @@ const GetAllMedicine = () => {
                     />
                 </div>
                 <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-                    Submit
+                    Book Prescription
                 </button>
             </form>
         </div>
