@@ -131,6 +131,15 @@ function UserHome() {
                             <button
                                 type="button"
                                 onClick={() => {
+                                    navigate("/patientMedicProfile");
+                                }}
+                                className="bg-green-500 mr-4 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                            >
+                                Medicines Orders
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
                                     navigate("/order-medicine");
                                 }}
                                 className="bg-green-500 mr-4 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"

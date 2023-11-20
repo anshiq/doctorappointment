@@ -34,7 +34,7 @@ function K() {
             const parsedUser = JSON.parse(userData);
             setUser(parsedUser);
         }
-    }, []);
+    }, [localStorage.getItem('user')]);
     if (user) {
         if (user.role === "doctor") {
             return (

@@ -60,6 +60,7 @@ function AllMedicOrders() {
         });
         if (response.status === 200) {
             console.log(response.data);
+            setEditData(null)
         }
     };
 
@@ -152,7 +153,6 @@ function AllMedicOrders() {
                         <p>No medicine data found for this user.</p>
                     )}
                 </div>
-
                 {editData && (
                     <div className="fixed inset-0 z-10 flex justify-center items-center h-screen overflow-y-scroll bg-black bg-opacity-40">
                         <form
